@@ -16,6 +16,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
     public function tearDown()
     {
         ServiceParser::destroyInstance();
+        App::destroyInstance();
     }
 
     public function testCorrectInitialisation()

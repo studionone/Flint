@@ -2,7 +2,8 @@
 namespace Flint\Tests;
 
 use Silex\Application,
-    Flint\App;
+    Flint\App,
+    Flint\ServiceParser;
 
 class AppTest extends \PHPUnit_Framework_TestCase
 {
@@ -13,7 +14,8 @@ class AppTest extends \PHPUnit_Framework_TestCase
             'core' => [
                 'configDir' => __DIR__ . '/../data',
                 'controllersFile' => '/controllers.php',
-                'routesFile' => '/routes.php'
+                'routesFile' => '/routes.php',
+                'servicesFile' => '/services.php'
             ]
         ];
     }
@@ -86,5 +88,17 @@ class AppTest extends \PHPUnit_Framework_TestCase
             ->configureControllers();
 
         $this->assertArrayHasKey('fake.controller', $app);
+    }
+
+    public function testServicesLoadedIntoPimple()
+    {
+        $app = App::getInstance($this->config);
+
+        $app->configureServices();
+
+        $this->assertArrayHasKey('Fake', $app);
+        $this->assertArrayHasKey('Fake2', $app);
+
+        ServiceParser::destroyInstance();
     }
 }

@@ -99,7 +99,7 @@ class App extends \Silex\Application
 
     public function configureServices()
     {
-        $servicesFile = $this->getAppConfig()['core']['configDir'] . $this->getAppConfig()['code']['servicesFIle'];
+        $servicesFile = $this->getAppConfig()['core']['configDir'] . $this->getAppConfig()['core']['servicesFile'];
 
         $serviceParser = ServiceParser::getInstance($servicesFile);
         $serviceParser->loadServices()->parse();
