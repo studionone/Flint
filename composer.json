@@ -1,4 +1,9 @@
 {
+    "name": "studionone/flint",
+    "repositories": [
+        "type": "vcs",
+        "url": "https://bitbucket.org/StudioNoneDev/flint.git"
+    ],
     "require": {
         "silex/silex": "~1.2",
         "twig/twig": "~1.18"
