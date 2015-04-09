@@ -97,6 +97,14 @@ class App extends \Silex\Application
         return $this;
     }
 
+    public function configureServices()
+    {
+        $servicesFile = $this->getAppConfig()['core']['configDir'] . $this->getAppConfig()['code']['servicesFIle'];
+
+        $serviceParser = ServiceParser::getInstance($servicesFile);
+        $serviceParser->loadServices()->parse();
+    }
+
     public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
     {
         $this->loadControllers()

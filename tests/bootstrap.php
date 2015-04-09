@@ -26,3 +26,31 @@ class FakeSingleton
         return true;
     }
 }
+
+class FakeService
+{
+    public function __construct(FakeService2 $fooService)
+    {
+        $this->foo = $fooService;
+    }
+
+    public function hello()
+    {
+        return "world".$this->foo->foo();
+    }
+}
+
+class FakeService2
+{
+    private $name;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+    }
+
+    public function foo()
+    {
+        return "bar".$this->name;
+    }
+}
