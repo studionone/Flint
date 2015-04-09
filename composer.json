@@ -1,8 +1,10 @@
 {
     "name": "studionone/flint",
     "repositories": [
-        "type": "vcs",
-        "url": "https://bitbucket.org/StudioNoneDev/flint.git"
+        {
+            "type": "vcs",
+            "url": "https://bitbucket.org/StudioNoneDev/flint.git"
+        }
     ],
     "require": {
         "silex/silex": "~1.2",
