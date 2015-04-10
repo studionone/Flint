@@ -52,7 +52,7 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
 
     public function testRouteParsing()
     {
-        $file = __DIR__ . '/../data/routes.php';
+        $file = __DIR__ . '/../data/routes.new.php';
         $parser = new RouteParser($file);
 
         $this->app->loadControllers()
@@ -109,5 +109,24 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
         $parser = new RouteParser($file);
 
         $parser->loadRoutes()->parse();
+    }
+
+    public function testConverterLoadedAndRuns()
+    {
+        $file = __DIR__ . '/../data/routes.new.php';
+        $parser = new RouteParser($file);
+
+        $this->app->loadControllers()
+            ->configureControllers();
+
+        $parser->loadRoutes()->parse();
+
+        $fakeReq1 = Request::create('/hello/josh');
+        $r1 = $this->app->handle($fakeReq1);
+        $this->assertEquals('hsoj', $r1->getContent());
+
+        $fakeReq2 = Request::create('/fake/hello/steve');
+        $r2 = $this->app->handle($fakeReq2);
+        $this->assertEquals('steve!', $r2->getContent());
     }
 }

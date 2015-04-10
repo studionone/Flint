@@ -43,7 +43,22 @@ class RouteParser
         foreach ($this->routes as $route => $def) {
             if (! $this->isGroup($def)) {
                 // register route directly
-                $this->registerRoute($route, $def[0], $def[1]);
+                $name = null;
+                $converter = null;
+
+                // Grab the name if passed in
+                if (array_key_exists(2, $def)
+                 && $def[2] !== null) {
+                    $name = $def[2];
+                }
+
+                // Grab the converter if passed in
+                if (array_key_exists(3, $def)
+                 && $def[3] !== null) {
+                    $converter = $def[3];
+                }
+
+                $this->registerRoute($route, $def[0], $def[1], $name, $converter);
                 continue;
             } else {
                 // is a group
@@ -68,18 +83,33 @@ class RouteParser
         $app = App::getInstance();
         $group = $app['controllers_factory'];
         foreach ($vals as $route => $def) {
+            $name = null;
+            $converter = null;
+
+            // Grab the name if passed in
+            if (array_key_exists(2, $def)
+             && $def[2] !== null) {
+                $name = $def[2];
+            }
+
+            // Grab the converter if passed in
+            if (array_key_exists(3, $def)
+             && $def[3] !== null) {
+                $converter = $def[3];
+            }
+
             switch (strtolower($def[0])) {
                 case 'get':
-                    $group->get($route, $def[1]);
+                    $r = $group->get($route, $def[1]);
                     break;
                 case 'post':
-                    $group->post($route, $def[1]);
+                    $r = $group->post($route, $def[1]);
                     break;
                 case 'put':
-                    $group->put($route, $def[1]);
+                    $r = $group->put($route, $def[1]);
                     break;
                 case 'delete':
-                    $group->delete($route, $def[1]);
+                    $r = $group->delete($route, $def[1]);
                     break;
                 default:
                     throw new InvalidRouteException('
@@ -87,33 +117,49 @@ class RouteParser
                     );
                     break;
             }
+
+            if ($name !== null) {
+                $r->bind($name);
+            }
+
+            if ($converter !== null) {
+                $r->convert($converter[0], $converter[1]);
+            }
         }
 
         $app->mount($base, $group);
     }
 
-    private function registerRoute($route, $http, $method)
+    private function registerRoute($route, $http, $method, $name = null, $converter = null)
     {
         $app = App::getInstance();
 
         switch (strtolower($http)) {
             case 'get':
-                $app->get($route, $method);
+                $r = $app->get($route, $method);
                 break;
             case 'post':
-                $app->post($route, $method);
+                $r = $app->post($route, $method);
                 break;
             case 'put':
-                $app->put($route, $method);
+                $r = $app->put($route, $method);
                 break;
             case 'delete':
-                $app->delete($route, $method);
+                $r = $app->delete($route, $method);
                 break;
             default:
                 throw new InvalidRouteException('
                     Incorrect HTTP method for route `' . $route . '`: ' . $http
                 );
                 break;
+        }
+
+        if ($name !== null) {
+            $r->bind($name);
+        }
+
+        if ($converter !== null) {
+            $r->convert($converter[0], $converter[1]);
         }
     }
 }
