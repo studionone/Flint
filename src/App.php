@@ -109,7 +109,8 @@ class App extends \Silex\Application
      */
     public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
     {
-        $this->loadControllers()
+        $this->configureServices()
+            ->loadControllers()
             ->configureControllers()
             ->configureRoutes();
 
