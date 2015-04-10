@@ -93,6 +93,10 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
                 'class' => 'FakeService2',
                 'arguments' => [ 'Josh' ],
             ],
+            'Fake3' => [
+                'class' => 'SharedService',
+                'shared' => true
+            ]
         ];
 
         // Stub out the loadServices method so we isolate the parsing
@@ -113,10 +117,13 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
         $result = $parser->parse();
 
         $this->assertArrayHasKey('Fake', $result);
+        $this->assertArrayHasKey('Fake2', $result);
+        $this->assertArrayHasKey('Fake3', $result);
 
-        $app = \Flint\App::getInstance();
+        // Testing whether the shared service worked correctly
+        $time = $result['Fake3']->getTime();
 
-        var_dump($app['Fake']->hello());
+        $this->assertEquals($time, \Flint\App::getInstance()['Fake3']->getTime());
 
         SingletonMock::cleanUp('Flint\ServiceParser');
     }

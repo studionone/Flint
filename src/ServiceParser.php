@@ -38,6 +38,7 @@ class ServiceParser
         return $this;
     }
 
+    // TODO: Add in support for "shared" and "protected" callbacks
     public function parse()
     {
         $app = \Flint\App::getInstance();
@@ -48,16 +49,39 @@ class ServiceParser
         }
 
         foreach ($raw as $name => $values) {
-            $app[$name] = function() use ($values) {
-                $class = new \ReflectionClass($values['class']);
-                $params = [];
+            if (isset($values['shared']) && $values['shared'] === true) {
+                // Shared service; ie: saves a single copy of the object passed in
+                $app[$name] = $app->share(function() use ($values) {
+                    $class = new \ReflectionClass($values['class']);
+                    $params = [];
 
-                foreach((array)$values['arguments'] as $argument) {
-                    $params[] = $this->parseArgument($argument);
-                }
+                    if (isset($values['arguments']) && ! empty($values['arguments'])) {
+                        foreach((array)$values['arguments'] as $argument) {
+                            $params[] = $this->parseArgument($argument);
+                        }
 
-                return $class->newInstanceArgs($params);
-            };
+                        return $class->newInstanceArgs($params);
+                    }
+
+                    return $class->newInstance();
+                });
+            } else {
+                // Regular Pimple/Silex service locator, runs constructor when you access
+                $app[$name] = function() use ($values) {
+                   $class = new \ReflectionClass($values['class']);
+                   $params = [];
+
+                   if (isset($values['arguments']) && ! empty($values['arguments'])) {
+                       foreach((array)$values['arguments'] as $argument) {
+                           $params[] = $this->parseArgument($argument);
+                       }
+
+                       return $class->newInstanceArgs($params);
+                   }
+
+                   return $class->newInstance();
+               };
+            }
         }
 
         return $app;

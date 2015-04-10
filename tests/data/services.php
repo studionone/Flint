@@ -8,5 +8,9 @@ return [
     'Fake2' => [
         'class' => 'FakeService2',
         'arguments' => [ 'Josh' ],
+    ],
+    'Fake3' => [
+        'class' => 'SharedService',
+        'shared' => true
     ]
 ];

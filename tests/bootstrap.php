@@ -54,3 +54,19 @@ class FakeService2
         return "bar".$this->name;
     }
 }
+
+class SharedService
+{
+    public $time;
+
+    public function __construct()
+    {
+        $this->time = microtime();
+    }
+
+    public function getTime()
+    {
+        return $this->time;
+    }
+}
+
