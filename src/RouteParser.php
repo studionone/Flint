@@ -83,7 +83,7 @@ class RouteParser
                     break;
                 default:
                     throw new InvalidRouteException('
-                        Incorrect HTTP method for route `' . $group . $route . '`: ' . $def[1]
+                        Incorrect HTTP method for route `' . $base . $route . '`: ' . $def[0]
                     );
                     break;
             }

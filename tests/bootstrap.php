@@ -70,3 +70,25 @@ class SharedService
     }
 }
 
+class SharedServiceWithArgs
+{
+    private $name;
+    private $time;
+
+    public function __construct($name)
+    {
+        $this->name = $name;
+        $this->time = microtime();
+    }
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function getTime()
+    {
+        return $this->time;
+    }
+}
+

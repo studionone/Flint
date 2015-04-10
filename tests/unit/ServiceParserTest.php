@@ -73,7 +73,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse();
     }
 
-    public function testSingleServiceLoadedIntoAppCorrectly()
+    public function testServicesLoadedIntoAppCorrectly()
     {
         \Flint\App::getInstance([
             'options' => [
@@ -96,6 +96,9 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
             'Fake3' => [
                 'class' => 'SharedService',
                 'shared' => true
+            ],
+            'Fake4' => [
+                'class' => 'SharedService'
             ]
         ];
 
@@ -125,6 +128,53 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
         // Testing whether the shared service worked correctly
         $time = $result['Fake3']->getTime();
         $this->assertEquals($time, \Flint\App::getInstance()['Fake3']->getTime());
+
+        // Showing the invariant case for shared service, without the sharing
+        $time = $result['Fake4']->getTime();
+        $this->assertNotEquals($time, \Flint\App::getInstance()['Fake4']->getTime());
+
+        SingletonMock::cleanUp('Flint\ServiceParser');
+    }
+
+    public function testSharedServiceWithArgLoadedCorrectly()
+    {
+        \Flint\App::getInstance([
+            'options' => [
+                'debug' => true
+            ],
+            'core' => [
+                'configDir' => __DIR__ . '/../data'
+            ]
+        ]);
+
+        $serviceConfig = [
+            'Fake' => [
+                'class' => 'SharedServiceWithArgs',
+                'arguments' => [ 'Josh' ],
+                'shared' => true
+            ]
+        ];
+
+        // Stub out the loadServices method so we isolate the parsing
+        $stub = $this->getMockBuilder('Flint\ServiceParser')
+            ->setConstructorArgs(['fakefile.php'])
+            ->setMethods(['loadServices'])
+            ->getMock();
+        $stub->expects($this->any())
+            ->method('loadServices')
+            ->will($this->returnValue($stub));
+
+        SingletonMock::inject($stub, 'Flint\ServiceParser');
+
+        $parser = ServiceParser::getInstance();
+        $parser->loadServices()
+            ->setServices($serviceConfig);
+
+        $result = $parser->parse();
+        $this->assertArrayHasKey('Fake', $result);
+        $time = $result['Fake']->getTime();
+        $this->assertEquals('Josh', $result['Fake']->getName());
+        $this->assertEquals($time, $result['Fake']->getTime());
 
         SingletonMock::cleanUp('Flint\ServiceParser');
     }

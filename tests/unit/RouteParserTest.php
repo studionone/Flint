@@ -88,4 +88,26 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
         $r6 = $this->app->handle($fakeReq6);
         $this->assertEquals('list', $r6->getContent());
     }
+
+    /**
+     * @expectedException Flint\Exception\InvalidRouteException
+     */
+    public function testInvalidRouteMethodThrowsException()
+    {
+        $file = __DIR__ . '/../data/routes.invalid.php';
+        $parser = new RouteParser($file);
+
+        $parser->loadRoutes()->parse();
+    }
+
+    /**
+     * @expectedException Flint\Exception\InvalidRouteException
+     */
+    public function testInvalidRouteMethodInGroupThrowsException()
+    {
+        $file = __DIR__ . '/../data/routes.groupInvalid.php';
+        $parser = new RouteParser($file);
+
+        $parser->loadRoutes()->parse();
+    }
 }

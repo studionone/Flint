@@ -20,13 +20,15 @@ trait Accessors
 
         switch ($match['accessor']) {
             case 'get':
+                // Short circut and return property directly
                 return $this->{$match['property']};
             case 'set':
                 if (! $args) {
                     throw new InvalidArgumentException(sprintf("'%s' requires an argument value.", $method));
                 }
                 $this->{$match['property']} = $args[0];
-                return $this;
         }
+
+        return $this;
     }
 }

@@ -3,7 +3,8 @@ namespace Flint\Tests;
 
 use Silex\Application,
     Flint\App,
-    Flint\ServiceParser;
+    Flint\ServiceParser,
+    Symfony\Component\HttpFoundation\Request;
 
 class AppTest extends \PHPUnit_Framework_TestCase
 {
@@ -100,5 +101,19 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('Fake2', $app);
 
         ServiceParser::destroyInstance();
+    }
+
+    public function testRoutesAreLoadedInCorrectly()
+    {
+        $app = App::getInstance($this->config);
+
+        $app->loadControllers()
+            ->configureControllers()
+            ->configureRoutes();
+
+        // Now see if the routes are loaded
+        $fakeReq = Request::create('/');
+        $r1 = $app->handle($fakeReq);
+        $this->assertEquals('hello', $r1->getContent());
     }
 }

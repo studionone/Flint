@@ -20,7 +20,13 @@ trait Singleton
         self::$instance = NULL;
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     final private function __clone() { }
 
+    /**
+     * @codeCoverageIgnore
+     */
     final private function __wakeup() { }
 }
