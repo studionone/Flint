@@ -29,13 +29,12 @@ class App extends \Silex\Application
         array $appConfig = [],
         array $silexConfig = []
     ) {
-        /**
-         * Set up error handling
-         */
+        // @codeCoverageIgnoreStart
         ErrorHandler::register();
         if (! 'cli' === php_sapi_name()) {
             ExceptionHandler::register();
         }
+        // @codeCoverageIgnoreEnd
 
         $this->setAppConfig($appConfig);
 
@@ -105,6 +104,9 @@ class App extends \Silex\Application
         $serviceParser->loadServices()->parse();
     }
 
+    /**
+     * @codeCoverageIgnore
+     */
     public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
     {
         $this->loadControllers()

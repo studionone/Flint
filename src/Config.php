@@ -19,19 +19,4 @@ class Config
 
         return $result;
     }
-/*
-    public function option($name, $set = '')
-    {
-        $app = NewApp::getInstance();
-
-        if ($set !== '') {
-            $app->getConfig()['options'][$name] = $set;
-        }
-
-        if (array_key_exists($name, $app->getConfig()['options'])) {
-            $val = $app->getConfig()['options'][$name];
-            return $val;
-        }
-    }
-*/
 }
