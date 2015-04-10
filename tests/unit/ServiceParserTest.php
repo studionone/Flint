@@ -120,9 +120,10 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('Fake2', $result);
         $this->assertArrayHasKey('Fake3', $result);
 
+        $this->assertEquals('worldbarJosh', $result['Fake']->hello());
+
         // Testing whether the shared service worked correctly
         $time = $result['Fake3']->getTime();
-
         $this->assertEquals($time, \Flint\App::getInstance()['Fake3']->getTime());
 
         SingletonMock::cleanUp('Flint\ServiceParser');
