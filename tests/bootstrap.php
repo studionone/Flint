@@ -91,4 +91,3 @@ class SharedServiceWithArgs
         return $this->time;
     }
 }
-

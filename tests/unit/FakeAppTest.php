@@ -1,10 +1,10 @@
 <?php
 namespace Flint\Tests;
 
-require_once __DIR__ . "/../mocks/FakeApp.php";
-
 use Flint\Tests\Mocks\FakeApp,
     Flint\Tests\Mocks\SingletonMock;
+
+require_once __DIR__ . '/../mocks/FakeApp.php';
 
 /**
  * @runTestsInSeparateProcesses
