@@ -7,12 +7,12 @@ trait Singleton
 
     final public static function getInstance()
     {
-        if ( ! isset(self::$instance)) {
+        if ( ! isset(static::$instance)) {
             $class = new \ReflectionClass(__CLASS__);
-            self::$instance = $class->newInstanceArgs(func_get_args());
+            static::$instance = $class->newInstanceArgs(func_get_args());
         }
 
-        return self::$instance;
+        return static::$instance;
     }
 
     final public static function destroyInstance()
