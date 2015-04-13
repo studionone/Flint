@@ -102,17 +102,20 @@ class App extends \Silex\Application
 
         $serviceParser = ServiceParser::getInstance($servicesFile);
         $serviceParser->loadServices()->parse();
+
+        return $this;
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
     public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
     {
         $this->configureServices()
             ->loadControllers()
             ->configureControllers()
             ->configureRoutes();
+
+        if (method_exists($this, 'init')) {
+            $this->init();
+        }
 
         return parent::run($request);
     }

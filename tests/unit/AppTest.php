@@ -4,6 +4,7 @@ namespace Flint\Tests;
 use Silex\Application,
     Flint\App,
     Flint\ServiceParser,
+    Flint\Tests\Mocks\SingletonMock,
     Symfony\Component\HttpFoundation\Request;
 
 class AppTest extends \PHPUnit_Framework_TestCase

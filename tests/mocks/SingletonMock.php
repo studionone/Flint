@@ -16,14 +16,15 @@ class SingletonMock
      */
     public static function inject(\PHPUnit_Framework_MockObject_MockObject $stub, $className)
     {
-        if (false === array_key_exists('Flint\Singleton', class_uses($className, true))) {
+        if (is_subclass_of($className, 'Flint\App')
+        || array_key_exists('Flint\Singleton', class_uses($className, true))) {
+            // Replace the reference in the singleton so getInstance returns our mock
+            $ref = new \ReflectionProperty($className, 'instance');
+            $ref->setAccessible(true);
+            $ref->setValue(null, $stub);
+        } else {
             throw new \ErrorException("Trying to inject a stub into a class that doesn't use the Flint\Singleton trait: ".$className);
         }
-
-        // Replace the reference in the singleton so getInstance returns our mock
-        $ref = new \ReflectionProperty($className, 'instance');
-        $ref->setAccessible(true);
-        $ref->setValue(null, $stub);
     }
 
     /**
