@@ -8,7 +8,7 @@ trait Singleton
     final public static function getInstance()
     {
         if ( ! isset(static::$instance)) {
-            $class = new \ReflectionClass(__CLASS__);
+            $class = new \ReflectionClass(get_called_class());
             static::$instance = $class->newInstanceArgs(func_get_args());
         }
 
