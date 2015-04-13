@@ -18,7 +18,7 @@ class ServiceParser
     use Accessors;
 
     protected $servicesFile = '';
-    protected $services = [];
+    protected $services = null;
 
     public function __construct($servicesFile)
     {
@@ -44,7 +44,7 @@ class ServiceParser
         $app = \Flint\App::getInstance();
         $raw = $this->getServices();
 
-        if (empty($raw)) {
+        if ($raw === null) {
             throw new \ErrorException('Trying to parse loaded services before loading the file.');
         }
 
