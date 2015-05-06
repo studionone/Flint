@@ -3,6 +3,7 @@ namespace Flint;
 
 use Silex\Application,
     Silex\Provider\ServiceControllerServiceProvider,
+    Silex\Provider\ValidatorServiceProvider,
     Symfony\Component\HttpKernel\Debug\ErrorHandler,
     Symfony\Component\HttpKernel\Debug\ExceptionHandler,
     Flint\Config,
@@ -102,6 +103,9 @@ class App extends \Silex\Application
 
         $serviceParser = ServiceParser::getInstance($servicesFile);
         $serviceParser->loadServices()->parse();
+
+        // Sets up the Validator service provider
+        $this->register(new ValidatorServiceProvider());
 
         return $this;
     }
