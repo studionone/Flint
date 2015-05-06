@@ -110,7 +110,7 @@ class App extends \Silex\Application
         return $this;
     }
 
-    public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
+    public function run($serviceOverride = NULL, \Symfony\Component\HttpFoundation\Request $request = NULL)
     {
         $this->configureServices()
             ->loadControllers()
@@ -119,6 +119,10 @@ class App extends \Silex\Application
 
         if (method_exists($this, 'init')) {
             $this->init();
+        }
+
+        if ($serviceOverride !== null) {
+            return $this[$serviceOverride]->run($request);
         }
 
         return parent::run($request);
