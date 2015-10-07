@@ -110,19 +110,25 @@ class App extends \Silex\Application
         return $this;
     }
 
-    public function run($serviceOverride = NULL, \Symfony\Component\HttpFoundation\Request $request = NULL)
+    public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
     {
+        $serviceOverride = null;
+
         $this->configureServices()
             ->loadControllers()
             ->configureControllers()
             ->configureRoutes();
 
         if (method_exists($this, 'init')) {
-            $this->init();
+            $serviceOverride = $this->init();
         }
 
+        /**
+         * Allows you to override the parent::run() method with a service inside the locator,
+         * usually used for http_cache and other plugins
+         */
         if ($serviceOverride !== null) {
-            return $this[$serviceOverride]->run($request);
+            return $serviceOverride->run($request);
         }
 
         return parent::run($request);
