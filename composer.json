@@ -3,7 +3,7 @@
     "repositories": [
         {
             "type": "vcs",
-            "url": "https://bitbucket.org/StudioNoneDev/flint.git"
+            "url": "https://github.com/studionone/Flint.git"
         }
     ],
     "require": {
