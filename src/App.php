@@ -4,8 +4,6 @@ namespace Flint;
 use Silex\Application,
     Silex\Provider\ServiceControllerServiceProvider,
     Silex\Provider\ValidatorServiceProvider,
-    Symfony\Component\HttpKernel\Debug\ErrorHandler,
-    Symfony\Component\HttpKernel\Debug\ExceptionHandler,
     Flint\Config,
     Flint\Exception\AppNotInstantiatedException,
     Flint\Exception\InvalidFileException,
@@ -30,13 +28,6 @@ class App extends \Silex\Application
         array $appConfig = [],
         array $silexConfig = []
     ) {
-        // @codeCoverageIgnoreStart
-        ErrorHandler::register();
-        if (! 'cli' === php_sapi_name()) {
-            ExceptionHandler::register();
-        }
-        // @codeCoverageIgnoreEnd
-
         $this->setAppConfig($appConfig);
 
         if (empty($this->getAppConfig())) {
