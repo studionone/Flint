@@ -12,11 +12,12 @@
         "symfony/validator": "~2.6"
     },
     "require-dev": {
-        "phpunit/phpunit": "3.7.x"
+        "phpunit/phpunit": "~5.1.0"
     },
     "autoload": {
         "psr-4": {
-            "Flint\\": "src"
+            "Flint\\": "src",
+            "Flint\\Tests\\": "tests"
         }
     },
     "scripts": {

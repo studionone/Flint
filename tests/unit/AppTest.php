@@ -1,11 +1,11 @@
 <?php
 namespace Flint\Tests;
 
-use Silex\Application,
-    Flint\App,
-    Flint\ServiceParser,
-    Flint\Tests\Mocks\SingletonMock,
-    Symfony\Component\HttpFoundation\Request;
+use Silex\Application;
+use Flint\App;
+use Flint\ServiceParser;
+use Flint\Tests\Mocks\SingletonMock;
+use Symfony\Component\HttpFoundation\Request;
 
 class AppTest extends \PHPUnit_Framework_TestCase
 {
@@ -29,7 +29,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
     public function testInitialisation()
     {
-        $s = $this->getMockBuilder('\Silex\Application')->getMock();
+        $s = new \Silex\Application();
         $app = App::getInstance($this->config);
 
         $this->assertInstanceOf('\Silex\Application', $app);

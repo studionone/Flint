@@ -17,7 +17,7 @@ class SingletonMock
     public static function inject(\PHPUnit_Framework_MockObject_MockObject $stub, $className)
     {
         if (is_subclass_of($className, 'Flint\App')
-        || array_key_exists('Flint\Singleton', class_uses($className, true))) {
+         || array_key_exists('Flint\Singleton', class_uses($className, true))) {
             // Replace the reference in the singleton so getInstance returns our mock
             $ref = new \ReflectionProperty($className, 'instance');
             $ref->setAccessible(true);
