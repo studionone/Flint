@@ -16,6 +16,7 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
             'core' => [
                 'configDir' => __DIR__ . '/../data',
                 'controllersFile' => '/controllers.php',
+                'servicesFile' => '/services.php',
                 'routesFile' => '/routes.php'
             ]
         ];
@@ -56,7 +57,7 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
         $parser = new RouteParser($file);
 
         $this->app->loadControllers()
-            ->configureControllers();
+            ->configureServices();
 
         $parser->loadRoutes()->parse();
 
@@ -117,7 +118,7 @@ class RouteParserTest extends \PHPUnit_Framework_TestCase
         $parser = new RouteParser($file);
 
         $this->app->loadControllers()
-            ->configureControllers();
+            ->configureServices();
 
         $parser->loadRoutes()->parse();
 

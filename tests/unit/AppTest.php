@@ -48,54 +48,11 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $this->assertArrayHasKey('configDir', $config['core']);
     }
 
-    /**
-     * @expectedException \Flint\Exception\InvalidControllersFileException
-     */
-    public function testInvalidControllersFileThrowsException()
-    {
-        $this->config['core']['controllersFile'] = 'abcd12345.php';
-
-        $app = App::getInstance($this->config);
-        $app->loadControllers();
-    }
-
-    public function testLoadingRealControllers()
-    {
-        $app = App::getInstance($this->config);
-
-        $controllers = $app->loadControllers()->getControllers();
-
-        $this->assertTrue(is_array($controllers));
-        $this->assertArrayHasKey('fake', $controllers);
-        $this->assertArrayNotHasKey('testing', $controllers);
-    }
-
-    /**
-     * @expectedException \Flint\Exception\InvalidControllerException
-     */
-    public function testInvalidControllerThrowsException()
-    {
-        $this->config['core']['controllersFile'] = '/controllers.invalid.php';
-        $app = App::getInstance($this->config);
-
-        $app->loadControllers()
-            ->configureControllers();
-    }
-
-    public function testControllersLoadedIntoSilex()
-    {
-        $app = App::getInstance($this->config);
-
-        $app->loadControllers()
-            ->configureControllers();
-
-        $this->assertArrayHasKey('fake.controller', $app);
-    }
-
     public function testServicesLoadedIntoPimple()
     {
         $app = App::getInstance($this->config);
 
+        $app->loadControllers();
         $app->configureServices();
 
         $this->assertArrayHasKey('Fake', $app);
@@ -109,7 +66,7 @@ class AppTest extends \PHPUnit_Framework_TestCase
         $app = App::getInstance($this->config);
 
         $app->loadControllers()
-            ->configureControllers()
+            ->configureServices()
             ->configureRoutes();
 
         // Now see if the routes are loaded

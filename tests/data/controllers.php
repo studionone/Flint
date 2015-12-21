@@ -1,7 +1,8 @@
 <?php
 
 return [
-    'fake' => function() {
-        return new FakeController();
-    }
+    'fake.controller' => [
+        'class' => 'FakeController',
+        'arguments' => []
+    ]
 ];

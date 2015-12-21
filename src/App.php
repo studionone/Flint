@@ -49,6 +49,8 @@ class App extends \Silex\Application
 
     public function loadControllers($controllerFile = '')
     {
+        $this->register(new ServiceControllerServiceProvider());
+
         if ($controllerFile === '') {
             $controllerFile = $this->getAppConfig()['core']['configDir'] . $this->getAppConfig()['core']['controllersFile'];
         }
@@ -57,22 +59,6 @@ class App extends \Silex\Application
             $this->setControllers(Config::getInstance()->load($controllerFile));
         } catch (InvalidFileException $e) {
             throw new InvalidControllersFileException($e->getMessage());
-        }
-
-        return $this;
-    }
-
-    public function configureControllers()
-    {
-        $this->register(new ServiceControllerServiceProvider());
-
-        foreach ($this->getControllers() as $name => $callable) {
-            if (! is_callable($callable)) {
-                throw new InvalidControllerException('Controller `'.$name.'` is not a callable');
-            }
-
-            $app = $this;
-            $app[$name . '.controller'] = $app->share($callable);
         }
 
         return $this;
@@ -93,7 +79,7 @@ class App extends \Silex\Application
         $servicesFile = $this->getAppConfig()['core']['configDir'] . $this->getAppConfig()['core']['servicesFile'];
 
         $serviceParser = ServiceParser::getInstance($servicesFile);
-        $serviceParser->loadServices()->parse();
+        $serviceParser->loadServices()->loadControllers($this->getControllers())->parse();
 
         // Sets up the Validator service provider
         $this->register(new ValidatorServiceProvider());
@@ -105,9 +91,8 @@ class App extends \Silex\Application
     {
         $serviceOverride = null;
 
-        $this->configureServices()
-            ->loadControllers()
-            ->configureControllers()
+        $this->loadControllers()
+            ->configureServices()
             ->configureRoutes();
 
         if (method_exists($this, 'init')) {

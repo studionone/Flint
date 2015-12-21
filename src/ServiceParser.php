@@ -19,6 +19,7 @@ class ServiceParser
 
     protected $servicesFile = '';
     protected $services = null;
+    protected $controllers = null;
 
     public function __construct($servicesFile)
     {
@@ -38,15 +39,47 @@ class ServiceParser
         return $this;
     }
 
+    public function loadControllers(array $controllers)
+    {
+        // Munge the controllers
+        $fixed = [];
+        foreach ($controllers as $name => $value) {
+            // Make sure it's shared
+            if (array_key_exists('share', $value) === false
+             || $value['share'] !== true) {
+                $value['share'] = true;
+            }
+
+            // Ensure it's name ends with 'controller'
+            if (substr($name, strlen($name) - strlen('.controller')) !== '.controller') {
+                throw new InvalidControllersFileException('ControllerService names must end in ".controller": ' . $name);
+            }
+
+            $fixed[$name] = $value;
+        }
+
+        $this->setControllers($fixed);
+
+        return $this;
+    }
+
     // TODO: Add in support for "shared" and "protected" callbacks
     public function parse()
     {
         $app = \Flint\App::getInstance();
-        $raw = $this->getServices();
+        $services = $this->getServices();
+        $controllers = $this->getControllers();
 
-        if ($raw === null) {
+        if ($services === null) {
             throw new \ErrorException('Trying to parse loaded services before loading the file.');
         }
+
+        // Append the controllers onto the service definitions
+        if ($controllers === null) {
+            $controllers = [];
+        }
+
+        $raw = array_merge($services, $controllers);
 
         foreach ($raw as $name => $values) {
             if (isset($values['shared']) && $values['shared'] === true) {

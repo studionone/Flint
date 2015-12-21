@@ -9,9 +9,12 @@ use Flint\ServiceParser,
 class ServiceParserTest extends \PHPUnit_Framework_TestCase
 {
     private $fakeConfig1 = [ 'hello' => 'world' ];
-    private $fakeConfig2 = [
+    private $fakeConfig2 = [];
 
-    ];
+    public function setUp()
+    {
+        ServiceParser::destroyInstance();
+    }
 
     public function tearDown()
     {
@@ -23,7 +26,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
     {
         $parser = ServiceParser::getInstance('fakefile.php');
 
-        $this->assertTrue('fakefile.php' === $parser->getServicesFile());
+        $this->assertEquals('fakefile.php', $parser->getServicesFile());
     }
 
     public function testLoadServicesFileIntoParser()
