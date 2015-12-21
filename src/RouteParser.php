@@ -85,6 +85,7 @@ class RouteParser
         foreach ($vals as $route => $def) {
             $name = null;
             $converter = null;
+            $assert = null;
 
             // Grab the name if passed in
             if (array_key_exists(2, $def)
@@ -96,6 +97,11 @@ class RouteParser
             if (array_key_exists(3, $def)
              && $def[3] !== null) {
                 $converter = $def[3];
+            }
+
+            if (array_key_exists(4, $def)
+             && $def[4] !== null) {
+                $assert = $def[4];
             }
 
             switch (strtolower($def[0])) {
@@ -125,12 +131,18 @@ class RouteParser
             if ($converter !== null) {
                 $r->convert($converter[0], $converter[1]);
             }
+
+            if ($assert !== null
+             && is_array($assert)
+             && count($assert) === 2) {
+                $r->assert($assert[0], $assert[1]);
+            }
         }
 
         $app->mount($base, $group);
     }
 
-    private function registerRoute($route, $http, $method, $name = null, $converter = null)
+    private function registerRoute($route, $http, $method, $name = null, $converter = null, $assert = null)
     {
         $app = App::getInstance();
 
@@ -160,6 +172,12 @@ class RouteParser
 
         if ($converter !== null) {
             $r->convert($converter[0], $converter[1]);
+        }
+
+        if ($assert !== null
+         && is_array($assert)
+         && count($assert) === 2) {
+            $r->assert($assert[0], $assert[1]);
         }
     }
 }
