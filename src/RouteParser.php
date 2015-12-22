@@ -6,6 +6,18 @@ use Flint\Exception\InvalidRoutesFileException,
     Flint\Exception\InvalidRouteException;
 
 /**
+ * Internal function for checking if array is associative
+ *
+ * @see http://stackoverflow.com/questions/173400/how-to-check-if-php-array-is-associative-or-sequential
+ * @param array $arr The array we're checking
+ * @return bool
+ */
+function isAssociative(array $arr)
+{
+    return array_keys($arr) !== range(0, count($arr) - 1);
+}
+
+/**
  * @method array getRoutes
  * @method \Flint\RouteParser setRoutes
  * @method string getRoutesFile
@@ -56,6 +68,12 @@ class RouteParser
                 if (array_key_exists(3, $def)
                  && $def[3] !== null) {
                     $converter = $def[3];
+                }
+
+                if (array_key_exists(4, $def)
+                 && $def[4] !== null
+                 && is_array($def)) {
+                    $assert = $def[4];
                 }
 
                 $this->registerRoute($route, $def[0], $def[1], $name, $converter);
@@ -118,8 +136,8 @@ class RouteParser
                     $r = $group->delete($route, $def[1]);
                     break;
                 default:
-                    throw new InvalidRouteException('
-                        Incorrect HTTP method for route `' . $base . $route . '`: ' . $def[0]
+                    throw new InvalidRouteException(
+                        'Incorrect HTTP method for route `' . $base . $route . '`: ' . $def[0]
                     );
                     break;
             }
@@ -133,9 +151,14 @@ class RouteParser
             }
 
             if ($assert !== null
-             && is_array($assert)
-             && count($assert) === 2) {
-                $r->assert($assert[0], $assert[1]);
+                && is_array($assert)) {
+                if (isAssociative($assert)) {
+                    foreach ($assert as $param => $regex) {
+                        $r->assert($param, $regex);
+                    }
+                } elseif (count($assert) === 2) {
+                    $r->assert($assert[0], $assert[1]);
+                }
             }
         }
 
@@ -160,8 +183,8 @@ class RouteParser
                 $r = $app->delete($route, $method);
                 break;
             default:
-                throw new InvalidRouteException('
-                    Incorrect HTTP method for route `' . $route . '`: ' . $http
+                throw new InvalidRouteException(
+                    'Incorrect HTTP method for route `' . $route . '`: ' . $http
                 );
                 break;
         }
@@ -175,9 +198,14 @@ class RouteParser
         }
 
         if ($assert !== null
-         && is_array($assert)
-         && count($assert) === 2) {
-            $r->assert($assert[0], $assert[1]);
+            && is_array($assert)) {
+            if (isAssociative($assert)) {
+                foreach ($assert as $param => $regex) {
+                    $r->assert($param, $regex);
+                }
+            } elseif (count($assert) === 2) {
+                $r->assert($assert[0], $assert[1]);
+            }
         }
     }
 }
