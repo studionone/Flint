@@ -72,11 +72,11 @@ class RouteParser
 
                 if (array_key_exists(4, $def)
                  && $def[4] !== null
-                 && is_array($def)) {
+                 && is_array($def[4])) {
                     $assert = $def[4];
                 }
 
-                $this->registerRoute($route, $def[0], $def[1], $name, $converter);
+                $this->registerRoute($route, $def[0], $def[1], $name, $converter, $assert);
                 continue;
             } else {
                 // is a group
