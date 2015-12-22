@@ -57,6 +57,7 @@ class RouteParser
                 // register route directly
                 $name = null;
                 $converter = null;
+                $assert = null;
 
                 // Grab the name if passed in
                 if (array_key_exists(2, $def)
