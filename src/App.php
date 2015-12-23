@@ -39,20 +39,6 @@ class App extends \Silex\Application
         parent::__construct($silexConfig);
     }
 
-    /**
-     * Backwards compatible impl to allow config to be injected into services
-     *
-     * @param array $config
-     * @return this
-     */
-    public function setAppConfig(array $config)
-    {
-        $this->appConfig = $config;
-        $this['config'] = $config;
-
-        return $this;
-    }
-
     public function loadConfig($configFile)
     {
         $config = Config::getInstance()->load($configFile);
@@ -101,14 +87,25 @@ class App extends \Silex\Application
         return $this;
     }
 
-    public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
+    /**
+     * For initialising Flint without relying on App::run()
+     * Also ensures `@config` is injectable via service locator
+     */
+    public function setupServicesAndConfig()
     {
-        $serviceOverride = null;
-
+        $this['config'] = $this->getAppConfig();
         $this->loadControllers()
             ->configureServices()
             ->configureRoutes();
+    }
 
+    public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
+    {
+        // Initialisation of Flint
+        $tis->setupServicesAndConfig();
+
+        // Initialisation of Silex
+        $serviceOverride = null;
         if (method_exists($this, 'init')) {
             $serviceOverride = $this->init();
         }
