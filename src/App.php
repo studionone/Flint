@@ -102,7 +102,7 @@ class App extends \Silex\Application
     public function run(\Symfony\Component\HttpFoundation\Request $request = NULL)
     {
         // Initialisation of Flint
-        $tis->setupServicesAndConfig();
+        $this->setupServicesAndConfig();
 
         // Initialisation of Silex
         $serviceOverride = null;
