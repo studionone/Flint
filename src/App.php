@@ -39,6 +39,20 @@ class App extends \Silex\Application
         parent::__construct($silexConfig);
     }
 
+    /**
+     * Backwards compatible impl to allow config to be injected into services
+     *
+     * @param array $config
+     * @return this
+     */
+    public function setAppConfig(array $config)
+    {
+        $this->appConfig = $config;
+        $this['config'] = $config;
+
+        return $this;
+    }
+
     public function loadConfig($configFile)
     {
         $config = Config::getInstance()->load($configFile);
