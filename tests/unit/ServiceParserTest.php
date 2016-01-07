@@ -24,7 +24,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
 
     public function testCorrectInitialisation()
     {
-        $parser = ServiceParser::getInstance('fakefile.php');
+        $parser = new ServiceParser('fakefile.php');
 
         $this->assertEquals('fakefile.php', $parser->getServicesFile());
     }
@@ -41,7 +41,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
 
         SingletonMock::inject($confStub, 'Flint\Config');
 
-        $parser = ServiceParser::getInstance('fakefile.php');
+        $parser = new ServiceParser('fakefile.php');
         $parser->loadServices();
 
         $this->assertArrayHasKey('hello', $parser->getServices());
@@ -54,7 +54,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
      */
     public function testInvalidServiceFileThrowsException()
     {
-        $parser = ServiceParser::getInstance('blah');
+        $parser = new ServiceParser('blah');
         $parser->loadServices();
     }
 
@@ -72,7 +72,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
             ]
         ]);
 
-        $parser = ServiceParser::getInstance('fakefile.php');
+        $parser = new ServiceParser('fakefile.php');
         $parser->parse();
     }
 
@@ -116,11 +116,10 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
 
         SingletonMock::inject($stub, 'Flint\ServiceParser');
 
-        $parser = ServiceParser::getInstance();
-        $parser->loadServices()
+        $stub->loadServices()
             ->setServices($serviceConfig);
 
-        $result = $parser->parse();
+        $result = $stub->parse();
 
         $this->assertArrayHasKey('Fake', $result);
         $this->assertArrayHasKey('Fake2', $result);
@@ -169,11 +168,10 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
 
         SingletonMock::inject($stub, 'Flint\ServiceParser');
 
-        $parser = ServiceParser::getInstance();
-        $parser->loadServices()
+        $stub->loadServices()
             ->setServices($serviceConfig);
 
-        $result = $parser->parse();
+        $result = $stub->parse();
         $this->assertArrayHasKey('Fake', $result);
         $time = $result['Fake']->getTime();
         $this->assertEquals('Josh', $result['Fake']->getName());

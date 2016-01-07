@@ -57,8 +57,6 @@ class AppTest extends \PHPUnit_Framework_TestCase
 
         $this->assertArrayHasKey('Fake', $app);
         $this->assertArrayHasKey('Fake2', $app);
-
-        ServiceParser::destroyInstance();
     }
 
     public function testRoutesAreLoadedInCorrectly()

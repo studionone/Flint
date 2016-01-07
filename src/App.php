@@ -78,7 +78,7 @@ class App extends \Silex\Application
     {
         $servicesFile = $this->getAppConfig()['core']['configDir'] . $this->getAppConfig()['core']['servicesFile'];
 
-        $serviceParser = ServiceParser::getInstance($servicesFile);
+        $serviceParser = new ServiceParser($servicesFile);
         $serviceParser->loadServices()->loadControllers($this->getControllers())->parse();
 
         // Sets up the Validator service provider
