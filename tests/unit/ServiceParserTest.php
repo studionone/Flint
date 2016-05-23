@@ -76,6 +76,50 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
         $parser->parse();
     }
 
+    public function testCallableServiceLoadedIntoAppCorrectly()
+    {
+        \Flint\App::getInstance([
+            'options' => [
+                'debug' => true
+            ],
+            'core' => [
+                'configDir' => __DIR__ . '/../data'
+            ]
+        ]);
+
+        $serviceConfig = [
+            'Hello' => function () {
+                $item = new \stdClass;
+                $item->hello = function () {
+                    return 'testing';
+                };
+
+                return $item;
+            }
+        ];
+
+        // Stub out the loadServices method so we isolate the parsing
+        $stub = $this->getMockBuilder('Flint\ServiceParser')
+            ->setConstructorArgs(['fakefile.php'])
+            ->setMethods(['loadServices'])
+            ->getMock();
+        $stub->expects($this->any())
+            ->method('loadServices')
+            ->will($this->returnValue($stub));
+
+        SingletonMock::inject($stub, 'Flint\ServiceParser');
+
+        $stub->loadServices()
+            ->setServices($serviceConfig);
+
+        $result = $stub->parse();
+        $this->assertArrayHasKey('Hello', $result);
+        $hello = $result['Hello']->hello();
+        $this->assertEquals($hello, 'testing');
+
+        SingletonMock::cleanUp('Flint\ServiceParser');
+    }
+
     public function testServicesLoadedIntoAppCorrectly()
     {
         \Flint\App::getInstance([
