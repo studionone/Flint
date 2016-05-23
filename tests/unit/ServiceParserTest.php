@@ -89,10 +89,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
 
         $serviceConfig = [
             'Hello' => function () {
-                $item = new \stdClass;
-                $item->hello = function () {
-                    return 'testing';
-                };
+                $item = new FakeStub;
 
                 return $item;
             }
@@ -222,5 +219,12 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($time, $result['Fake']->getTime());
 
         SingletonMock::cleanUp('Flint\ServiceParser');
+    }
+}
+
+class FakeStub
+{
+    public function hello() {
+        return 'testing';
     }
 }

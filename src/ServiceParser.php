@@ -82,7 +82,9 @@ class ServiceParser
         $raw = array_merge($services, $controllers);
 
         foreach ($raw as $name => $values) {
-            if (isset($values['share']) && $values['share'] === true) {
+            if (is_callable($values)) {
+                $app[$name] = $values;
+            } else if (isset($values['share']) && $values['share'] === true) {
                 // Shared service; ie: saves a single copy of the object passed in
                 $app[$name] = $app->share(function() use ($values) {
                     $class = new \ReflectionClass($values['class']);
