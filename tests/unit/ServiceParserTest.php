@@ -98,7 +98,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
             ],
             'Fake3' => [
                 'class' => 'SharedService',
-                'shared' => true
+                'share' => true
             ],
             'Fake4' => [
                 'class' => 'SharedService'
@@ -153,7 +153,7 @@ class ServiceParserTest extends \PHPUnit_Framework_TestCase
             'Fake' => [
                 'class' => 'SharedServiceWithArgs',
                 'arguments' => [ 'Josh' ],
-                'shared' => true
+                'share' => true
             ]
         ];
 
