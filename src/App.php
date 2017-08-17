@@ -19,7 +19,7 @@ use Silex\Application,
 class App extends \Silex\Application
 {
     use Singleton;
-    //use Accessors; // Not convinced we need it yet
+    use Accessors; // Not convinced we need it yet
 
     protected $appConfig;
     protected $controllers;
