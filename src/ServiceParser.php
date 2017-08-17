@@ -18,6 +18,7 @@ class ServiceParser
     use Singleton;
     use Accessors;
 
+    protected $factory = false;
     protected $servicesFile = '';
     protected $services = null;
     protected $controllers = null;
