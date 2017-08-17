@@ -17,9 +17,10 @@ class ServiceParser
     use Singleton;
     use Accessors;
 
-    protected $servicesFile = '';
+    protected $share = false;
     protected $services = null;
     protected $controllers = null;
+    protected $servicesFile = '';
 
     public function __construct($servicesFile)
     {
