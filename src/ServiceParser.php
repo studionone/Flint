@@ -86,7 +86,7 @@ class ServiceParser
             } else {
                 // method definition is the same for a factory service or shared service
                 // Create an anonymous function to be added for either
-                $tmpDefinition = (function() use ($values) {
+                $tmpDefinition = function() use ($values) {
                     $class = new \ReflectionClass($values['class']);
                     $params = [];
 
@@ -99,12 +99,12 @@ class ServiceParser
                     }
 
                     return $class->newInstance();
-                });
-            }
+                };
 
-            // If factory is true then we need to ensure that a wrapper is added around it to create a new instance each time
-            // Otherwise the instance in considered to be shared
-            $app[$name] = $this->getFactory() ? $app->factory($tmpDefinition) : $tmpDefinition;
+                // If factory is true then we need to ensure that a wrapper is added around it to create a new instance each time
+                // Otherwise the instance in considered to be shared
+                $app[$name] = $this->getFactory() ? $app->factory($tmpDefinition) : $tmpDefinition;
+            }
         }
 
         return $app;
