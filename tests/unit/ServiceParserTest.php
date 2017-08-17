@@ -6,7 +6,7 @@ use Flint\ServiceParser,
     Flint\Tests\Mocks\SingletonMock,
     Flint\App;
 
-class ServiceParserTest extends \PHPUnit_Framework_TestCase
+class ServiceParserTest extends \PHPUnit\Framework\TestCase
 {
     private $fakeConfig1 = [ 'hello' => 'world' ];
     private $fakeConfig2 = [];

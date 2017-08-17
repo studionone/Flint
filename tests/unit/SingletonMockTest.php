@@ -3,7 +3,7 @@ namespace Flint\Tests;
 
 use Flint\Tests\Mocks\SingletonMock;
 
-class SingletonMockTest extends \PHPUnit_Framework_TestCase
+class SingletonMockTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @expectedException \ErrorException

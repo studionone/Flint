@@ -11,6 +11,8 @@ trait Accessors
 {
     public function __call($method, $args)
     {
+        print_r($method);
+        print_r($args);
         if (! preg_match('/(?P<accessor>set|get)(?P<property>[A-Z][a-zA-Z0-9]*)/', $method, $match)
          || ! property_exists(__CLASS__, $match['property'] = lcfirst($match['property'])) ) {
             throw new BadMethodCallException(sprintf(
