@@ -4,9 +4,50 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "2b7557a5c53ca35f2a7ae3cce3784aaa",
-    "content-hash": "35698f8d92bcc451b8bab6b971abedf4",
+    "hash": "c6420d2a61dbba8a075bb9db7625c1e7",
+    "content-hash": "30a5dd903bd1571998d2d944c8094bf6",
     "packages": [
+        {
+            "name": "cocur/vale",
+            "version": "v0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cocur/vale.git",
+                "reference": "6bf6d4d538ac75c27dc42a8711a2aef16de273f9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cocur/vale/zipball/6bf6d4d538ac75c27dc42a8711a2aef16de273f9",
+                "reference": "6bf6d4d538ac75c27dc42a8711a2aef16de273f9",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9",
+                "phpunit/phpunit": "~4.5"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Cocur\\Vale\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Florian Eckerstorfer",
+                    "email": "florian@eckerstorfer.co",
+                    "homepage": "https://florian.ec"
+                }
+            ],
+            "description": "Vale is a helper utility that lets you get and set values in arbitrary nested arrays and objects.",
+            "time": "2015-03-24 10:17:57"
+        },
         {
             "name": "pimple/pimple",
             "version": "v3.2.2",

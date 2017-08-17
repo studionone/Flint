@@ -3,7 +3,8 @@ namespace Flint;
 
 use Flint\Exception\InvalidFileException,
     Flint\Exception\InvalidServicesFileException,
-    Flint\Exception\InvalidServiceException;
+    Flint\Exception\InvalidServiceException,
+    Cocur\Vale\Vale;
 
 /**
  * @method \Flint\ServiceParser getInstance()
@@ -17,10 +18,9 @@ class ServiceParser
     use Singleton;
     use Accessors;
 
-    protected $share = false;
+    protected $servicesFile = '';
     protected $services = null;
     protected $controllers = null;
-    protected $servicesFile = '';
 
     public function __construct($servicesFile)
     {
@@ -45,11 +45,8 @@ class ServiceParser
         // Munge the controllers
         $fixed = [];
         foreach ($controllers as $name => $value) {
-            // Make sure it's shared
-            if (array_key_exists('share', $value) === false
-             || $value['share'] !== true) {
-                $value['share'] = true;
-            }
+
+            $this->setFactory(Vale::get($value, ['factory'], false));
 
             // Ensure it's name ends with 'controller'
             if (substr($name, strlen($name) - strlen('.controller')) !== '.controller') {
@@ -85,9 +82,10 @@ class ServiceParser
         foreach ($raw as $name => $values) {
             if (is_callable($values)) {
                 $app[$name] = $values;
-            } else if (isset($values['share']) && $values['share'] === true) {
-                // Shared service; ie: saves a single copy of the object passed in
-                $app[$name] = $app->share(function() use ($values) {
+            } else {
+                // method definition is the same for a factory service or shared service
+                // Create an anonymous function to be added for either
+                $tmpDefinition = (function() use ($values) {
                     $class = new \ReflectionClass($values['class']);
                     $params = [];
 
@@ -101,23 +99,11 @@ class ServiceParser
 
                     return $class->newInstance();
                 });
-            } else {
-                // Regular Pimple/Silex service locator, runs constructor when you access
-                $app[$name] = function() use ($values) {
-                   $class = new \ReflectionClass($values['class']);
-                   $params = [];
-
-                   if (isset($values['arguments']) && ! empty($values['arguments'])) {
-                       foreach((array)$values['arguments'] as $argument) {
-                           $params[] = $this->parseArgument($argument);
-                       }
-
-                       return $class->newInstanceArgs($params);
-                   }
-
-                   return $class->newInstance();
-               };
             }
+
+            // If factory is true then we need to ensure that a wrapper is added around it to create a new instance each time
+            // Otherwise the instance in considered to be shared
+            $app[$name] = $this->getFactory() ? $app->factory($tmpDefinition) : $tmpDefinition;
         }
 
         return $app;
