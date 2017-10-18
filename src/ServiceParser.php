@@ -3,8 +3,7 @@ namespace Flint;
 
 use Flint\Exception\InvalidFileException,
     Flint\Exception\InvalidServicesFileException,
-    Flint\Exception\InvalidServiceException,
-    Cocur\Vale\Vale;
+    Flint\Exception\InvalidServiceException;
 
 /**
  * @method \Flint\ServiceParser getInstance()
@@ -47,7 +46,10 @@ class ServiceParser
         $fixed = [];
         foreach ($controllers as $name => $value) {
 
-            $this->setFactory(Vale::get($value, ['factory'], false));
+            // Only set the factory option if it's an array. This ensures that if an anonymous function is used ofr a controller it doesn't error
+            if (is_array($value) && isset($value['factory'])) {
+                $this->setFactory($value['factory']);
+            }
 
             // Ensure it's name ends with 'controller'
             if (substr($name, strlen($name) - strlen('.controller')) !== '.controller') {
