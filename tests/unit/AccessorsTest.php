@@ -17,7 +17,7 @@ class AccessorsStub
 }
 
 
-class AccessorsTest extends \PHPUnit_Framework_TestCase
+class AccessorsTest extends \PHPUnit\Framework\TestCase
 {
     public function testGetRealProperty()
     {

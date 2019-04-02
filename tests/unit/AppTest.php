@@ -7,7 +7,7 @@ use Flint\ServiceParser;
 use Flint\Tests\Mocks\SingletonMock;
 use Symfony\Component\HttpFoundation\Request;
 
-class AppTest extends \PHPUnit_Framework_TestCase
+class AppTest extends \PHPUnit\Framework\TestCase
 {
     public function setUp()
     {

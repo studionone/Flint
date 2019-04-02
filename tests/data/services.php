@@ -11,6 +11,5 @@ return [
     ],
     'Fake3' => [
         'class' => 'SharedService',
-        'shared' => true
     ]
 ];
