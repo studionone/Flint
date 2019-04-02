@@ -5,7 +5,7 @@ use Symfony\Component\HttpFoundation\Request,
     Flint\RouteParser,
     Flint\App;
 
-class RouteParserTest extends \PHPUnit_Framework_TestCase
+class RouteParserTest extends \PHPUnit\Framework\TestCase
 {
     protected $tmp;
 
